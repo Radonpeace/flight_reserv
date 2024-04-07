@@ -3,7 +3,8 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import path from 'path';
+import {authAdmin, authUser} from './middleware/auth.js';
+import UserRouter from './routes/UserRouter.js';
 
 const app = express();
 dotenv.config(); //* load environment variables from .env file
@@ -18,7 +19,7 @@ app.use(express.static('public')); //* serve static files from public directory
 app.set('view engine', 'ejs');
 app.set('views','views'); //* set views directory as views (__dirname is the current directory)
 
-
+console.log(process.env.JWT_SECRET)
 // Connect to MongoDB
 mongoose.connect(mongoDBUri).then(() => {
     console.log('MongoDB Connected');
@@ -27,8 +28,18 @@ mongoose.connect(mongoDBUri).then(() => {
 });
 
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
     res.send('Hello World');
+});
+
+app.use('/user', UserRouter);
+
+app.get('/userProtected', authUser, async (req, res) => {
+    res.send('User Protected Route');
+});
+
+app.get('/adminProtected', authAdmin, async (req, res) => {
+    res.send('Admin Protected Route');
 });
 
 

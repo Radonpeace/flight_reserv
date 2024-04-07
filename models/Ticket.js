@@ -1,4 +1,4 @@
-import { Model,Schema } from "mongoose";    
+import {model,Schema } from "mongoose";    
 
 const TicketSchema = new Schema({
     trip: {
@@ -40,7 +40,7 @@ TicketSchema.methods.cancel = function(){
 }
 
 
-const Ticket = Model('Ticket', TicketSchema);
+const Ticket =model('Ticket', TicketSchema);
 
 module.exports = Ticket;
 

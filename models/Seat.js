@@ -1,4 +1,4 @@
-import { Model,Schema } from "mongoose";
+import { model,Schema } from "mongoose";
 
 const SeatSchema = new Schema({
     seatNumber: {
@@ -34,6 +34,6 @@ SeatSchema.methods.cancel = function(){
     this.status = 'available';
 }
 
-const Seat = Model('Seat', SeatSchema);
+const Seat = model('Seat', SeatSchema);
 
 module.exports = Seat;
