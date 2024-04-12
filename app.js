@@ -5,6 +5,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import {authAdmin, authUser} from './middleware/auth.js';
 import UserRouter from './routes/UserRouter.js';
+import TripRouter from './routes/TripRouter.js';
 
 const app = express();
 dotenv.config(); //* load environment variables from .env file
@@ -18,6 +19,7 @@ app.use(cors());
 app.use(express.static('public')); //* serve static files from public directory
 app.set('view engine', 'ejs');
 app.set('views','views'); //* set views directory as views (__dirname is the current directory)
+app.use(express.static('public')); //* serve static files from public directory
 
 console.log(process.env.JWT_SECRET)
 // Connect to MongoDB
@@ -29,10 +31,16 @@ mongoose.connect(mongoDBUri).then(() => {
 
 
 app.get('/', async (req, res) => {
-    res.send('Hello World');
+    res.render('index');
 });
 
+app.get('/flightDetails',(req,res)=>{
+    res.render('flightDetails')
+})
+
 app.use('/user', UserRouter);
+app.use('/admin', UserRouter);
+app.use('/trip', TripRouter);
 
 app.get('/userProtected', authUser, async (req, res) => {
     res.send('User Protected Route');

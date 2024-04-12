@@ -64,22 +64,38 @@ const TripSchema = new Schema({
 
 
 TripSchema.methods.getAvailableSeats = function(){
-    return this.capacity - this.booked;
+    return {
+        economy: this.capacity.economy - this.booked.economy,
+        business: this.capacity.business - this.booked.business
+    }
 }
 
 TripSchema.methods.book = function(seats){
-    this.booked += seats;
+    const {economy, business} = seats;
+    if(this.getAvailableSeats().economy >= economy && this.getAvailableSeats().business >= business){
+        this.booked.economy += economy;
+        this.booked.business += business;
+    }
+    else{
+        throw new Error('Seats not available');
+    }
 }
 
 TripSchema.methods.cancel = function(seats){
-    if(this.booked >= seats){
-        this.booked -= seats;
+    const {economy, business} = seats;
+    if(this.booked.economy >= economy && this.booked.business >= business){
+        this.booked.economy -= economy;
+        this.booked.business -= business;
+    }
+    else{
+        throw new Error('Seats not booked');
     }
 }
 
 TripSchema.methods.isAvailableForBooking = function(seats){
-    return this.getAvailableSeats() >= seats;
+    return this.getAvailableSeats().economy >= seats || this.getAvailableSeats().business >= seats;
 }
 
 const Trip = model('Trip', TripSchema);
-module.exports = Trip; //? can be written as export default Trip; in ES6
+
+export default Trip;

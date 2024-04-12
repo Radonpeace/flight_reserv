@@ -12,8 +12,14 @@ const TicketSchema = new Schema({
         required: true
     },
     passengers: {
-        type: Number,
-        required: true
+        economy: {
+            type: Number,
+            required: true
+        },
+        business: {
+            type: Number,
+            required: true
+        }
     },
     totalPrice: {
         type: Number,
@@ -36,11 +42,11 @@ TicketSchema.methods.getTotalPrice = function(){
 
 TicketSchema.methods.cancel = function(){
     this.status = 'cancelled';
-    this.trip.cancel();
+    this.trip.cancel(this.passengers);
 }
 
 
 const Ticket =model('Ticket', TicketSchema);
 
-module.exports = Ticket;
+export default Ticket;
 
