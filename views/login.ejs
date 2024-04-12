@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="/css/styles.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/mdb-ui-kit/css/mdb.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <section class="vh-100">
+        <div class="container-fluid h-custom">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-md-9 col-lg-6 col-xl-5">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                class="img-fluid" alt="Sample image">
+            </div>
+            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                <form>
+                <p class="lead fw-normal mb-3 me-3 ">Sign in</p>
+        
+                <div class="d-flex flex-row align-items-center mb-1">
+                    <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0 form-floating">
+                        <input type="email" class="form-control" id="floatingInput" name="email" placeholder="user@gmail.com">
+                        <label for="floatingInput" class="text-muted">Email</label>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-row align-items-center mb-3">
+                <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                <div class="form-outline flex-fill mb-0 form-floating">
+                    <input type="password" class="form-control" id="floatingInput" name="password" placeholder="password">
+                    <label for="floatingInput" class="text-muted">Password</label>
+                </div>
+                </div>
+        
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="form-check mb-0">
+                    <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
+                    <label class="form-check-label" for="form2Example3">
+                        Remember me
+                    </label>
+                    </div>
+                    <a href="#!" class="text-body">Forgot password?</a>
+                </div>
+        
+                <div class="text-center text-lg-start mt-4 pt-2">
+                    <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
+                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
+                    <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="/signup"
+                        class="link-danger">Register</a></p>
+                </div>
+        
+                </form>
+            </div>
+            </div>
+        </div>
+        </section>
+    <script>
+        document.querySelector('button').addEventListener('click', async () => {
+            const form = document.querySelector('form');
+            const email = form.email.value;
+            const password = form.password.value;
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            }
+            
+            const response = await fetch('/user/login', options);
+            const data = await response.json();
+            if (data.status === 'success') {
+                console.log(data);
+                localStorage.setItem('token', data.token);
+                window.location.href = '/';
+            } else {
+                alert('Invalid email or password');
+            }
+        });
+
+    </script>
+</body>
+</html>

@@ -16,7 +16,7 @@ const signup = async (req, res) => {
 
         user = new User({ name, email, password, phone });
         await user.save();
-        return res.status(200).json({ msg: 'User created successfully' });
+        return res.status(200).json({ status:'success' });
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Server Error');
@@ -41,12 +41,12 @@ const login = async (req,res) =>{
         }
         jwt.sign(payload,process.env.JWT_SECRET,{expiresIn: 360000},(error,token)=>{
             if(error) throw error;
-            res.json({token: token});
+            res.json({status:"success" , token: token});
         }); //! token expires in 10 minutes
     }
     catch(error){
         console.error(error.message);
-        res.status(500).send('Server Error');
+        res.status(500).json({msg: 'Server Error'});
     }
 }
 

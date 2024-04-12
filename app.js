@@ -31,19 +31,29 @@ mongoose.connect(mongoDBUri).then(() => {
 
 
 app.get('/', async (req, res) => {
-    res.render('index');
+    const isLoggedIn = true;
+    console.log(req.userId);
+    res.render('index',{isLoggedIn});
 });
 
 app.get('/flightDetails',(req,res)=>{
     res.render('flightDetails')
 })
 
+app.get('/signup',(req,res)=>{
+    res.render('signup')
+})
+
+app.get('/login',(req,res)=>{
+    res.render('login')
+}) 
+
 app.use('/user', UserRouter);
 app.use('/admin', UserRouter);
 app.use('/trip', TripRouter);
 
 app.get('/userProtected', authUser, async (req, res) => {
-    res.send('User Protected Route');
+    res.send(req.userId);
 });
 
 app.get('/adminProtected', authAdmin, async (req, res) => {

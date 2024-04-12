@@ -11,7 +11,7 @@ const TicketSchema = new Schema({
         ref: 'User',
         required: true
     },
-    passengers: {
+    passengersCount: {
         economy: {
             type: Number,
             required: true
@@ -21,6 +21,21 @@ const TicketSchema = new Schema({
             required: true
         }
     },
+    passengers: 
+    [{
+            firstName: {
+                type: String,
+                required: true
+            },
+            lastName: {
+                type: String,
+                required: true
+            },
+            age: {
+                type: Number,
+                required: true
+            },
+    }],
     totalPrice: {
         type: Number,
         required: true
