@@ -1,43 +1,179 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css"
-      rel="stylesheet"
-    />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/styles.css" />
+  <title>Flight Booking Form</title>
+  <!-- Include Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="/css/styles.css" />
 </head>
+<!-- {
+    price: { economy: 5000, business: 10000 },
+    available: { economy: 40, business: 20 },
+    booked: { economy: 0, business: 0 },
+    _id: new ObjectId('66181823c538ac3c0f70e2a5'),
+    flight: 'AA113',
+    flightName: 'IndiGo',
+    from: 'Chennai',
+    to: 'Mumbai',
+    departureTime: 2024-05-01T02:30:00.000Z,
+    arrivalTime: 2024-05-01T04:30:00.000Z,
+    status: 'scheduled',
+    createdAt: 2024-04-12T02:08:33.118Z
+  } -->
 <body>
-    <nav>
+    <nav class="mb-4">
         <div class="nav__logo">Boobs</div>
         <ul class="nav__links">
-          <li class="link"><a href="#">Home</a></li>
-          <li class="link"><a href="#">About</a></li>
-          <li class="link"><a href="#">Offers</a></li>
-          <li class="link"><a href="#">Seats</a></li>
-          <li class="link"><a href="#">Destinations</a></li>
+            <li class="link"><a href="#">Home</a></li>
+            <li class="link"><a href="#">About</a></li>
+            <li class="link"><a href="#">Offers</a></li>
+            <li class="link"><a href="#">Seats</a></li>
+            <li class="link"><a href="#">Destinations</a></li>
         </ul>
         <button class="btn">Contact</button>
-      </nav>
-      <% if (trips && trips.length > 0) { %>
-        <ul>
-            <% trips.forEach((flight) => { %>
-                <li>From: <%= flight.from %></li>
-                <li>To: <%= flight.to %></li>
-                <li>Flight Name: <%= flight.flightName %></li>
-                <li>Capacity : <%= flight.capacity.economy %></li>
-                <li>Price: <%= flight.price.economy %></li>
-                <li>Departure: <%= flight.departureTime %></li>
-                <li>Arrival: <%= flight.arrivalTime %></li>
+    </nav>
 
-            <% }); %>
-        </ul>
-    <% } else { %>
-        <p>No flights found for the specified criteria.</p>
-    <% } %>
+    <form class="bookingForm">
+        <div class="mb-2 d-flex">
+            <div style="width:40%">
+                <label for="flightNumber" class="form-label">Flight Number</label>
+                <p id="flightNumber" class="form-control" ><%= flight.flight %></p>
+            </div>
+            
+            <div style="width: 40%;" class="mx-3">
+                <label for="flightName" class="form-label">Flight Name</label>
+                <p id="flightName" class="form-control"><%= flight.flightName %></p>
+            </div>  
+        </div>
+        <div class="d-flex mb-3">
+            <div style="width: 40%">
+                <label for="from" class="form-label">From</label>
+                <p id="from" class="form-control"><%= flight.from %></p>
+            </div>
+            <div style="width: 40%" class="mx-3">
+                <label for="to" class="form-label">To</label>
+                <p id="to" class="form-control"><%= flight.to %></p>
+            </div>
+        </div>
+        <div class="d-flex mb-3">
+            <div style="width: 40%">
+                <label for="arrivalTime" class="form-label">Arrival Time</label>
+                <p id="arrivalTime" class="form-control"><%= flight.arrivalTime %></p>
+            </div>
+            <div style="width: 40%" class="mx-3">
+                <label for="departureTime" class="form-label">Departure Time</label>
+                <p id="departureTime" class="form-control"><%= flight.departureTime %></p>
+            </div>
+        </div>
+        <label for="price" class="form-label h4">Economy Class</label>
+        <div class="d-flex">
+            <div style="width: 40%">
+                <label for="price" class="form-label">Price</label>
+                <p id="price" class="form-control"><%= flight.price.economy %></p>
+            </div>
+            <div style="width: 40%" class="mx-3">
+                <label for="available" class="form-label">Available</label>
+                <p id="available" class="form-control"><%= flight.available.economy %></p>
+            </div>
+        </div>
+        <label for="price" class="form-label h4">Business Class</label>
+        <div class="d-flex">
+            <div style="width: 40%">
+                <label for="price" class="form-label">Price</label>
+                <p id="price" class="form-control"><%= flight.price.business %></p>
+            </div>
+            <div style="width: 40%" class="mx-3">
+                <label for="available" class="form-label">Available</label>
+                <p id="available" class="form-control"><%= flight.available.business %></p>
+            </div>
+        </div>
+
+        <h3 class="mt-3">Passenger Details</h3>
+        <div class="d-flex mb-3">
+            <div class="mb-3" style="width: 30%;">
+                <label for="class" class="form-label">Class</label>
+                <select id="class" class="form-select">
+                    <option value="economy">Economy</option>
+                    <option value="business">Business</option>
+                </select>
+            </div>
+            <div class="mx-3" style="width: 30%;">
+                <label for="numPassengers" class="form-label">Number of Passengers</label>
+                <input type="number" id="numPassengers" class="form-control" min="1" max="60" onchange="addPassengerFields()">
+            </div>
+        </div>
+        
+
+        <div id="passengerDetails"></div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <script>
+        function addPassengerFields() {
+            const numPassengers = parseInt(document.getElementById("numPassengers").value);
+            const passengerDetails = document.getElementById("passengerDetails");
+            passengerDetails.innerHTML = '';
+            for (let i = 1; i <= numPassengers; i++) {
+                const passengerDiv = document.createElement('div');
+                passengerDiv.className = 'row mb-3';
+                passengerDiv.innerHTML = `
+                    <label for="passengerName${i}" class="form-label">Passenger ${i} Details</label>
+                    <div class="col">
+                        <input type="text" id="passengerName${i}" class="form-control" placeholder="First Name" required>
+                    </div>
+                    <div class="col">
+                        <input type="text" id="passengerAge${i}" class="form-control" placeholder="Last Name" required>
+                    </div>
+                    <div class="col">
+                        <input type="number" id="passengerAge${i}" class="form-control" placeholder="Age" required>
+                    </div>
+                `;
+                passengerDetails.appendChild(passengerDiv);
+            }
+        }
+        document.getElementById('bookingForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const flightNumber = document.getElementById('flightNumber').innerText;
+            const flightName = document.getElementById('flightName').innerText;
+            const from = document.getElementById('from').innerText;
+            const to = document.getElementById('to').innerText;
+            const departureTime = document.getElementById('departureTime').innerText;
+            const arrivalTime = document.getElementById('arrivalTime').innerText;
+            const classType = document.getElementById('class').value;
+            const numPassengers = parseInt(document.getElementById('numPassengers').value);
+            const passengers = [];
+            for (let i = 1; i <= numPassengers; i++) {
+                const passengerName = document.getElementById(`passengerName${i}`).value;
+                const passengerAge = document.getElementById(`passengerAge${i}`).value;
+                passengers.push({ name: passengerName, age: passengerAge });
+            }
+            fetch('/book', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    flightNumber,
+                    flightName,
+                    from,
+                    to,
+                    departureTime,
+                    arrivalTime,
+                    class: classType,
+                    passengers
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Booking successful');
+                } else {
+                    alert('Booking failed');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

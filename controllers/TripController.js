@@ -1,6 +1,7 @@
 import { Router } from "express";
 import  Trip  from "../models/Trip.js"
 import Ticket from "../models/Ticket.js"
+import mongoose from "mongoose";
 
 
 const insertAll = async (req,res) =>{
@@ -8,16 +9,33 @@ const insertAll = async (req,res) =>{
     res.send('Inserted all trip details');
 }
 
-const getDetails = async (req,res) =>{
+const getFlightsDetails = async (req,res) =>{
     const {from: From, departure: Departure, fromDate: FromDate, toDate: ToDate} = req.query; 
-    console.log(From, Departure, FromDate, ToDate);
     const trips = await Trip.find({from: From, to: Departure});
+    let fromDate = new Date(FromDate);
+    let toDate = new Date(ToDate);
     const actualTrips = trips.filter(trip => {
-        return trip.arrivalTime >= FromDate && trip.departureTime <= ToDate;
+        return trip.arrivalTime >= fromDate && trip.departureTime <= toDate;
     });
-    console.log(actualTrips);
-    res.render('flight',{trips: trips});
+    actualTrips.forEach(trip => {
+        trip.departureTime = trip.departureTime.toISOString().split('T')[0]; // toISOString() returns date in ISO format
+        trip.arrivalTime = trip.arrivalTime.toISOString().split('T')[0];
+    });
+    actualTrips.sort((a,b) => a.departureTime - b.departureTime); // sort by departure time
+    res.render('flights',{trips: actualTrips});
 
+}
+
+const getFlightDetail = async (req,res) => {
+    const {fid} = req.params;
+    if(mongoose.Types.ObjectId.isValid(fid)){
+        const trip = await Trip.findById(fid);
+        console.log(trip);
+        trip.departureTime = trip.departureTime.toISOString().split('T')[0];
+        trip.arrivalTime = trip.arrivalTime.toISOString().split('T')[0];
+        trip.available = await trip.getAvailableSeats();
+        res.render('flight',{flight: trip});
+    }
 }
 
     
@@ -92,4 +110,4 @@ const cancelTicket = async (req,res) =>{
         res.status(500).send('Server Error');
     }
 }
-export {insertAll,getDetails,bookTicket,getTickets,getTicket,cancelTicket}
+export {insertAll,getFlightsDetails,bookTicket,getTickets,getTicket,cancelTicket,getFlightDetail}

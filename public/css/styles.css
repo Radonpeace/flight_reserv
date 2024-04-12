@@ -467,6 +467,8 @@ nav {
   margin-bottom: 1rem;
 }
 
+
+
 .footer__col h4 {
   font-size: 1.2rem;
   font-weight: 500;
@@ -510,6 +512,21 @@ nav {
   color: var(--extra-light);
 }
 
+.bookingForm{
+  max-width:var(--max-width);
+  margin:auto;
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  column-gap: 0rem;
+}
 @media (width < 1200px) {
   .section__container.header__container,
   .section__container.plan__container,
