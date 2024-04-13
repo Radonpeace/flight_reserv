@@ -1,4 +1,4 @@
-import { Model,Schema } from "mongoose";    
+import {model,Schema } from "mongoose";    
 
 const TicketSchema = new Schema({
     trip: {
@@ -11,10 +11,26 @@ const TicketSchema = new Schema({
         ref: 'User',
         required: true
     },
-    passengers: {
+    passengersCount: {
         type: Number,
         required: true
     },
+    classType: {
+        type: String,
+        enum: ['economy', 'business'],
+        required: true
+    },
+    passengers: 
+    [{
+        name: {
+            type: String,
+            required: true
+        },
+        age: {
+            type: Number,
+            required: true
+        },
+    }],
     totalPrice: {
         type: Number,
         required: true
@@ -36,11 +52,11 @@ TicketSchema.methods.getTotalPrice = function(){
 
 TicketSchema.methods.cancel = function(){
     this.status = 'cancelled';
-    this.trip.cancel();
+    this.trip.cancel(this.passengers);
 }
 
 
-const Ticket = Model('Ticket', TicketSchema);
+const Ticket =model('Ticket', TicketSchema);
 
-module.exports = Ticket;
+export default Ticket;
 

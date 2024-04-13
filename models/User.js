@@ -1,4 +1,4 @@
-import { Model, Schema , SchemaType } from "mongoose";
+import { model, Schema , SchemaType } from "mongoose";
 import bcrypt from 'bcryptjs';
 
 const UserSchema = new Schema({
@@ -51,15 +51,17 @@ UserSchema.methods.hashPassword = async function(){
 
 UserSchema.pre('save', async function(next){
     const user = this;
-
+    const salt = await bcrypt.genSalt(10);
     if(user.isModified('password') || user.isNew){
-        await user.hashPassword();
+        const hash = await bcrypt.hash(user.password ,salt );
+        user.password = hash;
         next();
     }
 });
 
-const User = Model('User', UserSchema);
-module.exports = User;
+const User = model('User', UserSchema);
+
+export default User //* can be written as export default User; in ES6
 
 
 //* salt is generally a random value that is used as an additional input to a one-way function that hashes data, a password or passphrase.

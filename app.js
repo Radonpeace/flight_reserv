@@ -3,7 +3,11 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import path from 'path';
+import {authAdmin, authUser} from './middleware/auth.js';
+import UserRouter from './routes/UserRouter.js';
+import TripRouter from './routes/TripRouter.js';
+import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 dotenv.config(); //* load environment variables from .env file
@@ -17,9 +21,10 @@ app.use(cors());
 app.use(express.static('public')); //* serve static files from public directory
 app.set('view engine', 'ejs');
 app.set('views','views'); //* set views directory as views (__dirname is the current directory)
+app.use(express.static('public')); //* serve static files from public directory
+app.use(cookieParser());
 
 
-// Connect to MongoDB
 mongoose.connect(mongoDBUri).then(() => {
     console.log('MongoDB Connected');
 }).catch((error) => {
@@ -27,8 +32,58 @@ mongoose.connect(mongoDBUri).then(() => {
 });
 
 
-app.get('/', (req, res) => {
-    res.send('Hello World');
+app.get('/', async (req, res) => {
+    const cookies = req.headers.cookie.split('; ').reduce((prev, current) => {
+        const [name, value] = current.split('=');
+        prev[name] = value;
+        return prev;
+    }, {});
+    
+    const tokenCookie = cookies['token'];
+    if(tokenCookie){
+        jwt.verify(tokenCookie, process.env.JWT_SECRET, (error, decoded) => {
+            if(error){
+                console.log('Token is not valid');
+            }
+            else{
+                console.log(decoded);
+                req.userId = decoded.user.id;
+            }
+        });
+    }
+    // console.log(req.userId)
+    let isLoggedIn = req.userId ? true : false;
+    res.render('index',{isLoggedIn});
+});
+
+app.get('/logout',authUser,(req,res)=>{
+    res.clearCookie('token');
+    res.redirect('/login');
+})
+
+app.get('/flightDetails',(req,res)=>{
+    res.render('flightDetails')
+})
+
+app.get('/signup',(req,res)=>{
+    res.render('signup')
+})
+
+app.get('/login',(req,res)=>{
+    res.render('login')
+}) 
+
+app.use('/user', UserRouter);
+app.use('/admin', UserRouter);
+app.use(authUser);
+app.use('/trip', TripRouter);
+
+app.get('/userProtected', authUser, async (req, res) => {
+    res.send(req.userId);
+});
+
+app.get('/adminProtected', authAdmin, async (req, res) => {
+    res.send('Admin Protected Route');
 });
 
 
