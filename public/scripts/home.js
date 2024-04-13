@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     const form = document.querySelector('.form');
-    console.log('Home page loaded');
 
     if(form) {
         form.addEventListener('submit', async function(event) {
@@ -9,7 +8,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             const formData = new FormData(form); // Create a new FormData object
             const data = Object.fromEntries(formData); // Convert formData to an object
             const {from, departure, fromDate, toDate} = data;
-            console.log(from, departure, fromDate, toDate);
+            //console.log(from, departure, fromDate, toDate);
             
             const options = {
                 method: 'GET',

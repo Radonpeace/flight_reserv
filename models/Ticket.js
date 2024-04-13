@@ -12,29 +12,24 @@ const TicketSchema = new Schema({
         required: true
     },
     passengersCount: {
-        economy: {
-            type: Number,
-            required: true
-        },
-        business: {
-            type: Number,
-            required: true
-        }
+        type: Number,
+        required: true
+    },
+    classType: {
+        type: String,
+        enum: ['economy', 'business'],
+        required: true
     },
     passengers: 
     [{
-            firstName: {
-                type: String,
-                required: true
-            },
-            lastName: {
-                type: String,
-                required: true
-            },
-            age: {
-                type: Number,
-                required: true
-            },
+        name: {
+            type: String,
+            required: true
+        },
+        age: {
+            type: Number,
+            required: true
+        },
     }],
     totalPrice: {
         type: Number,

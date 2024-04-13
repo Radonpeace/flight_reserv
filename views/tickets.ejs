@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="/css/styles.css" />
+    
     <link
       href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css"
       rel="stylesheet"
@@ -23,29 +23,30 @@
           <li class="link"><a href="/">Destinations</a></li>
         </ul>
         <button class="btn">Contact</button>
-      </nav>
-      <% if (trips.length > 0) { %>
-        <div class="container">
-            <% trips.forEach((flight) => { %>
-              <div class="card shadow-lg p-3 mb-5 bg-white rounded" style="width: 18rem;">
-                <div class="card-body">
-                  <h5 class="card-title"></h5>
-                  <h6 class="card-subtitle mb-2 text-muted"><%= flight.flight %></h6>
-                  <div class="card-text">
-                    <label for="from">From</label>
-                    <p><%= flight.from %></p>
-                    <label for="to">To : </label>
-                    <p><%= flight.to %></p>
-                    <p><%= flight.departureTime %></p>
-                    <p><%= flight.arrivalTime %></p>
-                  </div>
-                  <a href="/trip/details/<%= flight.id %>" class="card-link">View</a>
-                </div>
-              </div>
-            <% }); %>
+    </nav>
+    <% if (tickets.length > 0) { %>
+        <div class="tickets">
+            <h3>Your Tickets</h3>
+            <ul>
+                <% tickets.forEach(ticket => { %>
+                    <li>
+                        <div class="ticket">
+                            <div class="ticket__header">
+                                <h4><%= ticket.trip.flightName %></h4>
+                                <p><%= ticket.trip.flight %></p>
+                            </div>
+                            <div class="ticket__body">
+                                <p><%= ticket.trip.from %> to <%= ticket.to %></p>
+                                <p><%= ticket.trip.departureTime %> - <%= ticket.arrivalTime %></p>
+                            </div>
+                        </div>
+                    </li>
+                <% }) %>
+            </ul>
         </div>
     <% } else { %>
-        <p>No flights found for the specified criteria.</p>
+        <div class="alert alert-danger" role="alert">
+            <strong>Failed!</strong> You have not traveled anywhere yet .
+        </div>
     <% } %>
 </body>
-</html>

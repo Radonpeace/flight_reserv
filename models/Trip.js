@@ -70,15 +70,18 @@ TripSchema.methods.getAvailableSeats = function(){
     }
 }
 
-TripSchema.methods.book = function(seats){
-    const {economy, business} = seats;
-    if(this.getAvailableSeats().economy >= economy && this.getAvailableSeats().business >= business){
-        this.booked.economy += economy;
-        this.booked.business += business;
+TripSchema.methods.book = async function(seats){
+    const classType = seats.classType;
+    if(!['economy', 'business'].includes(classType)){
+        throw new Error('Invalid class type');
+    }
+    if(this.isAvailableForBooking(seats)){
+        this.booked[classType] += seats.count;
     }
     else{
         throw new Error('Seats not available');
     }
+    await this.save();
 }
 
 TripSchema.methods.cancel = function(seats){
@@ -93,7 +96,26 @@ TripSchema.methods.cancel = function(seats){
 }
 
 TripSchema.methods.isAvailableForBooking = function(seats){
-    return this.getAvailableSeats().economy >= seats || this.getAvailableSeats().business >= seats;
+    const {classType,count } = seats;
+    const availableSeats = this.getAvailableSeats();
+    if(classType === 'economy' && availableSeats.economy >= count){
+        return true;
+    }
+    else if(classType === 'business' && availableSeats.business >= count){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+TripSchema.methods.isCancelled = function(){
+    return this.status === 'cancelled';
+}
+
+TripSchema.methods.calculateFair=function(seats){
+    const {classType, count} = seats;
+    return this.price[classType] * count;
 }
 
 const Trip = model('Trip', TripSchema);

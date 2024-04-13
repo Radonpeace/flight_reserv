@@ -96,7 +96,7 @@
             const form = document.querySelector('form');
             const formData = new FormData(form); // form data in form of key-value pair
             const { name, email, password, rePassword, phone } = await Object.fromEntries(formData);
-            console.log(name, email, password, rePassword, phone);
+            //console.log(name, email, password, rePassword, phone);
             if (password !== rePassword) {
                 alert('password not match');
                 return;

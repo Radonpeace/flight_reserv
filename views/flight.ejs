@@ -34,7 +34,7 @@
         <button class="btn">Contact</button>
     </nav>
 
-    <form class="bookingForm">
+    <form class="bookingForm" id="bookingForm">
         <div class="mb-2 d-flex">
             <div style="width:40%">
                 <label for="flightNumber" class="form-label">Flight Number</label>
@@ -58,12 +58,12 @@
         </div>
         <div class="d-flex mb-3">
             <div style="width: 40%">
-                <label for="arrivalTime" class="form-label">Arrival Time</label>
-                <p id="arrivalTime" class="form-control"><%= flight.arrivalTime %></p>
-            </div>
-            <div style="width: 40%" class="mx-3">
                 <label for="departureTime" class="form-label">Departure Time</label>
                 <p id="departureTime" class="form-control"><%= flight.departureTime %></p>
+            </div>
+            <div style="width: 40%" class="mx-3">
+                <label for="arrivalTime" class="form-label">Arrival Time</label>
+                <p id="arrivalTime" class="form-control"><%= flight.arrivalTime %></p>
             </div>
         </div>
         <label for="price" class="form-label h4">Economy Class</label>
@@ -121,10 +121,10 @@
                 passengerDiv.innerHTML = `
                     <label for="passengerName${i}" class="form-label">Passenger ${i} Details</label>
                     <div class="col">
-                        <input type="text" id="passengerName${i}" class="form-control" placeholder="First Name" required>
+                        <input type="text" id="passengerFirstName${i}" class="form-control" placeholder="First Name" required>
                     </div>
                     <div class="col">
-                        <input type="text" id="passengerAge${i}" class="form-control" placeholder="Last Name" required>
+                        <input type="text" id="passengerLastName${i}" class="form-control" placeholder="Last Name" required>
                     </div>
                     <div class="col">
                         <input type="number" id="passengerAge${i}" class="form-control" placeholder="Age" required>
@@ -133,47 +133,36 @@
                 passengerDetails.appendChild(passengerDiv);
             }
         }
-        document.getElementById('bookingForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const flightNumber = document.getElementById('flightNumber').innerText;
-            const flightName = document.getElementById('flightName').innerText;
-            const from = document.getElementById('from').innerText;
-            const to = document.getElementById('to').innerText;
-            const departureTime = document.getElementById('departureTime').innerText;
-            const arrivalTime = document.getElementById('arrivalTime').innerText;
+        
+        document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if(confirm('Are you sure you want to book the flight?') === false) return;
             const classType = document.getElementById('class').value;
-            const numPassengers = parseInt(document.getElementById('numPassengers').value);
+            const tripId = '<%= flight._id %>';
+            const count = parseInt(document.getElementById('numPassengers').value);
             const passengers = [];
-            for (let i = 1; i <= numPassengers; i++) {
-                const passengerName = document.getElementById(`passengerName${i}`).value;
+            for (let i = 1; i <= count; i++) {
+                const passengerFirstName = document.getElementById(`passengerFirstName${i}`).value;
+                const passengerLastName = document.getElementById(`passengerLastName${i}`).value;
+                const passengerName = `${passengerFirstName} ${passengerLastName}`;
                 const passengerAge = document.getElementById(`passengerAge${i}`).value;
                 passengers.push({ name: passengerName, age: passengerAge });
             }
-            fetch('/book', {
+            const seats = {
+                classType : classType,
+                count: count
+            };
+            const response = await fetch('/trip/book', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    flightNumber,
-                    flightName,
-                    from,
-                    to,
-                    departureTime,
-                    arrivalTime,
-                    class: classType,
-                    passengers
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Booking successful');
-                } else {
-                    alert('Booking failed');
-                }
+                body: JSON.stringify({ tripId,seats, passengers })
             });
+            const data = await response.json();
+            alert(data.msg);
         });
+        
     </script>
 </body>
 </html>

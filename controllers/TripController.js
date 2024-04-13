@@ -41,27 +41,26 @@ const getFlightDetail = async (req,res) => {
     
 // {passengers: {economy: 2, business: 1}, tripId: '60b1d7c1f1b4f1a5d4c0e4a5'
 const bookTicket = async (req,res) =>{
-    const {passengers, tripId} = req.body;
-    const {economy , business} = passengers;
+    const {seats, tripId,passengers} = req.body;
     try{
         const trip = await Trip.findById(tripId);
         if(trip === null){
             return res.status(400).json({msg: 'Trip not found'});
         }
-        
-        trip.book(passengers);
+        await trip.book(seats);
+
+        const fair = trip.calculateFair(seats);
         const ticket = new Ticket({
             trip: tripId,
-            user: req.user.id,
+            user: req.userId,
+            passengersCount: seats.count,
+            classType: seats.classType,
             passengers: passengers,
-            totalPrice: (economy * trip.price.economy) + (business * trip.price.business),
+            totalPrice: fair,
         });
         await ticket.save();
-        // trip.booked.economy += passengers.economy;
-        // trip.booked.business += passengers.business;
-        // await trip.save();
-        
-        res.json({msg: 'Ticket booked successfully'});
+        console.log(ticket);
+        return res.json({msg: 'Ticket booked successfully'});
     }
     catch(error){
         console.error(error.message);
@@ -72,7 +71,8 @@ const bookTicket = async (req,res) =>{
 
 const getTickets = async (req,res) =>{
     try{
-        const tickets = await Ticket.find({user: req.user.id}).populate('trip');
+        const tickets = await Ticket.find({user: req.userId}).populate('trip');
+        console.log(tickets);
         res.render('tickets',{tickets: tickets});
     }
     catch(error){

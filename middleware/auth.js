@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 function authUser(req, res, next) {
-    const token = req.header('Authorization').split(' ')[1];
+    // const token = req.header('Authorization').split(' ')[1];
+    const token = req.cookies['token'] //cannot use without cookie-parser
     if (!token) {
         return res.status(401).json({ msg: 'No token, authorization denied' });
     }
@@ -23,7 +24,8 @@ function authUser(req, res, next) {
 }
 
 function authAdmin(req,res,next){
-    const token = req.header('Authorization').split(' ')[1];
+    // const token = req.header('Authorization').split(' ')[1];
+    const token = req.cookie['token']
     if (!token) {
         return res.status(401).json({ msg: 'No token, authorization denied' });
     }

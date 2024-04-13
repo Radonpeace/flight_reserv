@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 import {authAdmin, authUser} from './middleware/auth.js';
 import UserRouter from './routes/UserRouter.js';
 import TripRouter from './routes/TripRouter.js';
+import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 dotenv.config(); //* load environment variables from .env file
@@ -20,9 +22,9 @@ app.use(express.static('public')); //* serve static files from public directory
 app.set('view engine', 'ejs');
 app.set('views','views'); //* set views directory as views (__dirname is the current directory)
 app.use(express.static('public')); //* serve static files from public directory
+app.use(cookieParser());
 
-console.log(process.env.JWT_SECRET)
-// Connect to MongoDB
+
 mongoose.connect(mongoDBUri).then(() => {
     console.log('MongoDB Connected');
 }).catch((error) => {
@@ -31,10 +33,33 @@ mongoose.connect(mongoDBUri).then(() => {
 
 
 app.get('/', async (req, res) => {
-    const isLoggedIn = true;
-    console.log(req.userId);
+    const cookies = req.headers.cookie.split('; ').reduce((prev, current) => {
+        const [name, value] = current.split('=');
+        prev[name] = value;
+        return prev;
+    }, {});
+    
+    const tokenCookie = cookies['token'];
+    if(tokenCookie){
+        jwt.verify(tokenCookie, process.env.JWT_SECRET, (error, decoded) => {
+            if(error){
+                console.log('Token is not valid');
+            }
+            else{
+                console.log(decoded);
+                req.userId = decoded.user.id;
+            }
+        });
+    }
+    // console.log(req.userId)
+    let isLoggedIn = req.userId ? true : false;
     res.render('index',{isLoggedIn});
 });
+
+app.get('/logout',authUser,(req,res)=>{
+    res.clearCookie('token');
+    res.redirect('/login');
+})
 
 app.get('/flightDetails',(req,res)=>{
     res.render('flightDetails')
@@ -50,6 +75,7 @@ app.get('/login',(req,res)=>{
 
 app.use('/user', UserRouter);
 app.use('/admin', UserRouter);
+app.use(authUser);
 app.use('/trip', TripRouter);
 
 app.get('/userProtected', authUser, async (req, res) => {

@@ -15,7 +15,10 @@
   margin: 0;
   box-sizing: border-box;
 }
-
+.tickets{
+  max-width: var(--max-width);
+  margin: auto;
+}
 .divider:after,
 .divider:before {
 content: "";

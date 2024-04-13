@@ -51,9 +51,10 @@ UserSchema.methods.hashPassword = async function(){
 
 UserSchema.pre('save', async function(next){
     const user = this;
-
+    const salt = await bcrypt.genSalt(10);
     if(user.isModified('password') || user.isNew){
-        await user.hashPassword();
+        const hash = await bcrypt.hash(user.password ,salt );
+        user.password = hash;
         next();
     }
 });
