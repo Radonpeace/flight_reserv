@@ -10,12 +10,28 @@
   --max-width: 1200px;
 }
 
+.heading {
+  font-size: 2.5rem;
+  font-weight: 600;
+  line-height: 3rem;
+  color: var(--primary-color);
+}
+
+th{
+  font-size: 1.1rem;
+
+}
+
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
 .tickets{
+  max-width: var(--max-width);
+  margin: auto;
+}
+.history{
   max-width: var(--max-width);
   margin: auto;
 }

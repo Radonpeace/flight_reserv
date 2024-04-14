@@ -30,7 +30,7 @@ const getFlightDetail = async (req,res) => {
     const {fid} = req.params;
     if(mongoose.Types.ObjectId.isValid(fid)){
         const trip = await Trip.findById(fid);
-        console.log(trip);
+        //console.log(trip);
         trip.departureTime = trip.departureTime.toISOString().split('T')[0];
         trip.arrivalTime = trip.arrivalTime.toISOString().split('T')[0];
         trip.available = await trip.getAvailableSeats();
@@ -59,7 +59,7 @@ const bookTicket = async (req,res) =>{
             totalPrice: fair,
         });
         await ticket.save();
-        console.log(ticket);
+        //console.log(ticket);
         return res.json({msg: 'Ticket booked successfully'});
     }
     catch(error){
@@ -72,7 +72,13 @@ const bookTicket = async (req,res) =>{
 const getTickets = async (req,res) =>{
     try{
         const tickets = await Ticket.find({user: req.userId}).populate('trip');
-        console.log(tickets);
+        tickets.forEach(ticket => {
+            ticket.classType = ticket.classType.toUpperCase();
+            ticket.status = ticket.status.toUpperCase();
+            ticket.trip.departureTime = ticket.trip.departureTime.toISOString().split('T')[0];
+            ticket.trip.arrivalTime = ticket.trip.arrivalTime.toISOString().split('T')[0];
+        });
+        tickets.sort((a,b) => b.bookingDate - a.bookingDate);
         res.render('tickets',{tickets: tickets});
     }
     catch(error){

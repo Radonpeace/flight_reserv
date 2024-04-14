@@ -33,20 +33,26 @@ mongoose.connect(mongoDBUri).then(() => {
 
 
 app.get('/', async (req, res) => {
-    const cookies = req.headers.cookie.split('; ').reduce((prev, current) => {
-        const [name, value] = current.split('=');
-        prev[name] = value;
-        return prev;
-    }, {});
-    
-    const tokenCookie = cookies['token'];
+    try{
+        const cookies = req.headers.cookie.split('; ').reduce((prev, current) => {
+            const [name, value] = current.split('=');
+            prev[name] = value;
+            return prev;
+        }, {});
+    }
+    catch(error){
+        res.redirect('/login');
+        console.log('No cookies found');
+    }
+
+    const tokenCookie = req.cookies.token;
     if(tokenCookie){
         jwt.verify(tokenCookie, process.env.JWT_SECRET, (error, decoded) => {
             if(error){
                 console.log('Token is not valid');
             }
             else{
-                console.log(decoded);
+                //console.log(decoded);
                 req.userId = decoded.user.id;
             }
         });

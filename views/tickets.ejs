@@ -16,37 +16,123 @@
     <nav>
         <div class="nav__logo">Boobs</div>
         <ul class="nav__links">
-          <li class="link"><a href="/">Home</a></li>
-          <li class="link"><a href="/">About</a></li>
-          <li class="link"><a href="/">Offers</a></li>
-          <li class="link"><a href="/">Seats</a></li>
-          <li class="link"><a href="/">Destinations</a></li>
+            <li class="link"><a href="/">Home</a></li>
+            <li class="link"><a href="/">About</a></li>
+            <li class="link"><a href="/">Offers</a></li>
+            <li class="link"><a href="/">Seats</a></li>
+            <li class="link"><a href="/">Destinations</a></li>
         </ul>
         <button class="btn">Contact</button>
     </nav>
     <% if (tickets.length > 0) { %>
-        <div class="tickets">
-            <h3>Your Tickets</h3>
-            <ul>
-                <% tickets.forEach(ticket => { %>
-                    <li>
-                        <div class="ticket">
-                            <div class="ticket__header">
-                                <h4><%= ticket.trip.flightName %></h4>
-                                <p><%= ticket.trip.flight %></p>
-                            </div>
-                            <div class="ticket__body">
-                                <p><%= ticket.trip.from %> to <%= ticket.to %></p>
-                                <p><%= ticket.trip.departureTime %> - <%= ticket.arrivalTime %></p>
-                            </div>
-                        </div>
-                    </li>
-                <% }) %>
-            </ul>
-        </div>
+        <!DOCTYPE html>
+        <html lang="en">
+        
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Booked Tickets</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link href="https://cdn.jsdelivr.net/npm/mdb-ui-kit/css/mdb.min.css" rel="stylesheet">
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+                body {
+                    font-family: 'Roboto', sans-serif;
+                }
+            </style>
+            <link rel="stylesheet" href="/css/styles.css" />
+        </head>
+        
+        <body>
+            <div class="d-flex justify-content-center mt-3">
+                <h1 class="heading">Booked Tickets</h1>
+            </div>
+            <div class="history">                
+                <% if (tickets.length > 0) { %>
+                    <table class="table table-hover table-condensed">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th width="10%">Trip</th>
+                                <th>Class Type</th>
+                                <th width="2%">Passengers Count</th>
+                                <th width="12%">Arrival Time</th>
+                                <th width="12%">Departure Time</th>
+                                <th width="20%">Passengers Details</th>
+                                <th>Total Price</th>
+                                <th>Booked Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% tickets.forEach(ticket => { %>
+                                <tr>
+                                    <td><%= ticket.trip.flight %> (From <b><%= ticket.trip.from %></b> to <b><%= ticket.trip.to %></b>)</td>
+                                    <td><%= ticket.classType %></td>
+                                    <td><%= ticket.passengersCount %></td>
+                                    <td>
+                                        <% 
+                                        let arrivalTime = new Date(ticket.trip.arrivalTime);
+                                        let dayArrival = String(arrivalTime.getDate()).padStart(2, '0');
+                                        let monthArrival = String(arrivalTime.getMonth() + 1).padStart(2, '0');
+                                        let yearArrival = arrivalTime.getFullYear();
+                                        let hours = String(arrivalTime.getHours()).padStart(2, '0');
+                                        let minutes = String(arrivalTime.getMinutes()).padStart(2, '0');
+                                        let formattedArrivalTime = `${dayArrival}/${monthArrival}/${yearArrival}  Time : ${hours}:${minutes}`;
+                                        %>
+                                        <%= formattedArrivalTime %>
+                                    </td>
+                                    <td>
+                                        <% 
+                                        let departureTime = new Date(ticket.trip.departureTime);
+                                        let dayDeparture = String(departureTime.getDate()).padStart(2, '0');
+                                        let monthDeparture = String(departureTime.getMonth() + 1).padStart(2, '0');
+                                        let yearDeparture = departureTime.getFullYear();
+                                        let hoursDeparture = String(departureTime.getHours()).padStart(2, '0');
+                                        let minutesDeparture = String(departureTime.getMinutes()).padStart(2, '0');
+                                        let formattedDepartureTime = `${dayDeparture}/${monthDeparture}/${yearDeparture}  Time : ${hoursDeparture}:${minutesDeparture}`;
+                                        %>
+                                        <%= formattedDepartureTime %>
+                                    <td>
+                                        <ul class="list-group">
+                                            <% ticket.passengers.forEach(passenger => { %>
+                                                <li class="list-group-item">
+                                                    <b><%= passenger.name %></b> <br>
+                                                    Age : <%= passenger.age %> years
+                                                </li>
+                                            <% }); %>
+                                        </ul>
+                                    </td>
+                                    <td><b>₹<%= ticket.totalPrice %></b></td>
+                                    <td>
+                                        <% 
+                                        let bookingDate = new Date(ticket.bookingDate);
+                                        let day = String(bookingDate.getDate()).padStart(2, '0');
+                                        let month = String(bookingDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based, so we add 1
+                                        let year = bookingDate.getFullYear();
+                                    
+                                        let formattedDate = `${day}/${month}/${year}`;
+                                        %>
+                                        <%= formattedDate %>
+                                    </td>
+                                    <td><%= ticket.status %></td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                <% } else { %>
+                    <p class="text-center">No booked tickets found.</p>
+                <% } %>
+            </div>
+        
+        </body>
+        
+        </html>
+        
     <% } else { %>
         <div class="alert alert-danger" role="alert">
-            <strong>Failed!</strong> You have not traveled anywhere yet .
+            <strong>OOPS!</strong> You have not traveled anywhere yet .
         </div>
     <% } %>
 </body>
