@@ -31,6 +31,9 @@ mongoose.connect(mongoDBUri).then(() => {
     console.log(error);
 });
 
+app.get('/contact',(req,res)=>{
+    res.render('contact')
+}) 
 
 app.get('/', async (req, res) => {
     try{

@@ -34,6 +34,7 @@ const getFlightDetail = async (req,res) => {
         trip.departureTime = trip.departureTime.toISOString().split('T')[0];
         trip.arrivalTime = trip.arrivalTime.toISOString().split('T')[0];
         trip.available = await trip.getAvailableSeats();
+        console.log(trip);  
         res.render('flight',{flight: trip});
     }
 }

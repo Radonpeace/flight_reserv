@@ -22,7 +22,7 @@
             <li class="link"><a href="/">Seats</a></li>
             <li class="link"><a href="/">Destinations</a></li>
         </ul>
-        <button class="btn">Contact</button>
+        <a href="/contact" class="btn">Contact</a> 
     </nav>
     <% if (tickets.length > 0) { %>
         <!DOCTYPE html>
@@ -68,7 +68,7 @@
                         <tbody>
                             <% tickets.forEach(ticket => { %>
                                 <tr>
-                                    <td><%= ticket.trip.flight %> (From <b><%= ticket.trip.from %></b> to <b><%= ticket.trip.to %></b>)</td>
+                                    <td><a href="/trip/details/<%= ticket.trip._id %>"><%= ticket.trip.flight %></a><br>(From <b><%= ticket.trip.from %></b> to <b><%= ticket.trip.to %></b>)</td>
                                     <td><%= ticket.classType %></td>
                                     <td><%= ticket.passengersCount %></td>
                                     <td>
