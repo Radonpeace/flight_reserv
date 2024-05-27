@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     if(form) {
         form.addEventListener('submit', async function(event) {
             event.preventDefault();
-            console.log(form)
+            //console.log(form)
             const formData = new FormData(form); // Create a new FormData object
             const data = Object.fromEntries(formData); // Convert formData to an object
             const {from, departure, fromDate, toDate} = data;
