@@ -13,6 +13,10 @@ const TripSchema = new Schema({
         type: String,
         required: true
     },
+    flightName:{
+        type: String,
+        required: true
+    },
     arrivalTime:{
         type: Date,
         required: true
