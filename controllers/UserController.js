@@ -20,7 +20,7 @@ const signup = async (req, res) => {
         return res.status(200).json({ status:'success' });
     } catch (error) {
         console.error(error.message);
-        res.status(500).send('Server Error');
+        return res.status(500).json({ msg: 'Server Error' });
     }
 }
 
@@ -32,7 +32,7 @@ const login = async (req,res) =>{
             return res.status(400).json({msg: 'Invalid Credentials'});
         }
         if(!user.comparePassword(password)){
-            return res.status(400).json({msg: 'Invalid Credentials'});
+            return res.status(500).json({msg: 'Invalid Credentials'});
         }
         const payload = {
             user:{
@@ -49,7 +49,7 @@ const login = async (req,res) =>{
             } //cookie will expire in 10 hours
             res.cookie('token', token, cookieOptions); //! setting cookie
             if(error) throw error;
-            res.json({status:"success" , token: token});
+            return res.json({status:"success" , token: token});
         }); // no need to use async await since jwt.sign is synchronous , no expiring time for now
     }
     catch(error){
