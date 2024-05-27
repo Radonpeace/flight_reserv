@@ -26,7 +26,6 @@ app.use(cookieParser());
 
 
 // monoDB atlas connection
-console.log(mongoDBUri);
 mongoose.connect(mongoDBUri).then(() => {
     console.log(`MongoDB connected successfully`);
 }).catch((error) => {
