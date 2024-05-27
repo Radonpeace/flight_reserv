@@ -25,15 +25,13 @@ app.use(express.static('public')); //* serve static files from public directory
 app.use(cookieParser());
 
 
+// monoDB atlas connection
+console.log(mongoDBUri);
 mongoose.connect(mongoDBUri).then(() => {
-    console.log('MongoDB Connected');
+    console.log(`MongoDB connected successfully`);
 }).catch((error) => {
-    console.log(error);
+    console.log(`Error: ${error.message}`);
 });
-
-app.get('/contact',(req,res)=>{
-    res.render('contact')
-}) 
 
 app.get('/', async (req, res) => {
     try{

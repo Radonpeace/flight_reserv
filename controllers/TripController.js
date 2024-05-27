@@ -2,6 +2,7 @@ import { Router } from "express";
 import  Trip  from "../models/Trip.js"
 import Ticket from "../models/Ticket.js"
 import mongoose from "mongoose";
+import tripDetails from "../frontend/seed.js";
 
 
 const insertAll = async (req,res) =>{

@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import {insertAll,getFlightsDetails,getFlightDetail, bookTicket,getTickets} from "../controllers/TripController.js";
-import { get } from "mongoose";
+
 
 const router = Router();
 
