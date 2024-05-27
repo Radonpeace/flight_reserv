@@ -83,23 +83,24 @@ const forgotPassword = async (req,res) =>{
                     pass: '96315196'
                 }
             });
-            const mailOptions = {
-                from: process.env.EMAIL,
-                to: email,
-                subject: 'Password Reset Link',
-                text: `Click on the link to reset your password: http://localhost:8000/resetPassword/${token}\n
-                The link will expire in 10 minutes.`
-            }
-            transporter.sendMail(mailOptions,(error,info)=>{
-                if(error){
-                    console.error(error.message);
-                    res.status(500).json({msg: 'Server Error'});
-                }
-                else{
-                    console.log('Email sent: ' + info.response);
-                    res.json({msg: 'Email sent'});
-                }
-            });
+            alert('This service is not available at the moment')
+            // const mailOptions = {
+            //     from: process.env.EMAIL,
+            //     to: email,
+            //     subject: 'Password Reset Link',
+            //     text: `Click on the link to reset your password: http://localhost:8000/resetPassword/${token}\n
+            //     The link will expire in 10 minutes.`
+            // }
+            // transporter.sendMail(mailOptions,(error,info)=>{
+            //     if(error){
+            //         console.error(error.message);
+            //         res.status(500).json({msg: 'Server Error'});
+            //     }
+            //     else{
+            //         console.log('Email sent: ' + info.response);
+            //         res.json({msg: 'Email sent'});
+            //     }
+            // });
         });
     }
     catch(error){
