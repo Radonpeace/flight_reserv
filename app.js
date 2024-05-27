@@ -62,9 +62,21 @@ app.get('/', async (req, res) => {
     res.render('index',{isLoggedIn});
 });
 
+app.get('/contact',(req,res)=>{
+    res.render('contact')
+})
+
 app.get('/logout',authUser,(req,res)=>{
     res.clearCookie('token');
     res.redirect('/login');
+})
+
+app.get('/about',(req,res)=>{
+    res.render('about')
+})
+
+app.get('/destinations',(req,res)=>{
+    res.render('destinations')
 })
 
 app.get('/flightDetails',(req,res)=>{
