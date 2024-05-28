@@ -19,12 +19,12 @@
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
-                <strong class="me-auto text-success">Flight Reservation</strong>
-                <small>just now</small>
+                <strong class="me-auto text-success">Flight Reservation </strong>
+                <small>Just now</small>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="toast-body text-success">
-                Registration successful. Redirecting to login page...
+            <div class="toast-body text-primary">
+                Registration successful, redirecting to login page...
             </div>
         </div>
     </div>
@@ -82,7 +82,7 @@
                             </div>
         
                             <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg">Register</button>
+                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg" id="btn">Register</button>
                             <p class="small fw-bold mt-2 pt-1 mb-2 mx-2">Already have an account? <a href="/login"
                                 class="link-danger">Login</a></p>
                             </div>
@@ -104,12 +104,12 @@
         </div>
     </section>
     <script>
-        const btn = document.querySelector('button');
+        const btn = document.querySelector('#btn');
         btn.addEventListener('click', async () => {
             const form = document.querySelector('form');
             const formData = new FormData(form); // form data in form of key-value pair
-            const { name, email, password, rePassword, phone } = await Object.fromEntries(formData);
-            //console.log(name, email, password, rePassword, phone);
+            const { name, email, password, rePassword, phone } = await Object.fromEntries(formData); // convert form data to object
+            console.log(name, email, password, rePassword, phone);
             if (password !== rePassword) {
                 alert('password not match');
                 return;
@@ -131,8 +131,11 @@
             const data = await res.json();
             if (data.status === 'success') {
                 alert('Signup successful, redirecting to login page...');
+                var toastEl = document.getElementById('liveToast');
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastEl);
+                toastBootstrap.show();
                 setTimeout(() => {
-                    console.log('redirecting');
+                    //console.log('redirecting');
                     window.location.href = '/login';
                 }, 3000);
             } else {

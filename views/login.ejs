@@ -80,7 +80,7 @@
     </section>
     <script>
         document.querySelector('#btn').addEventListener('click', async () => {
-            console.log('clicked');
+            //console.log('clicked');
             const form = document.querySelector('form');
             const email = form.email.value;
             const password = form.password.value;
@@ -97,7 +97,7 @@
             const response = await fetch('/user/login', options);
             const data = await response.json();
             if (data.status === 'success') {
-                console.log(data);
+                //console.log(data);
                 localStorage.setItem('token', data.token);
                 var toastEl = document.getElementById('liveToast');
                 const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastEl);
