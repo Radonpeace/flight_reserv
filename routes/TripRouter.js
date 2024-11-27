@@ -15,6 +15,8 @@ router.get('/details/:fid', getFlightDetail);
 
 router.get('/tickets', getTickets);
 
+router.get('/insertAll',insertAll);
+
 
 
 export default router;

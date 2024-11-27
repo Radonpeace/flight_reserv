@@ -8,13 +8,13 @@ import UserRouter from './routes/UserRouter.js';
 import TripRouter from './routes/TripRouter.js';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
+import { insertAll } from './controllers/TripController.js';
 
 const app = express();
 dotenv.config(); //* load environment variables from .env file
 const PORT = process.env.PORT;
-const mongoDBUri = process.env.MONGODB_URI;
-
-
+const mongoDBUri = process.env.MONGODB_URI || "mongodb://localhost:27017/test"
+ 
 app.use(bodyParser.urlencoded({ extended: true })); //* parse application/x-www-form-urlencoded -> for form data
 app.use(bodyParser.json()); //* parse application/json -> for json data
 app.use(cors());
@@ -61,6 +61,8 @@ app.get('/', async (req, res) => {
     let isLoggedIn = req.userId ? true : false;
     res.render('index',{isLoggedIn});
 });
+
+app.get('/insertAll',insertAll);
 
 app.get('/contact',(req,res)=>{
     res.render('contact')

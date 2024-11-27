@@ -2,10 +2,11 @@ import { Router } from "express";
 import  Trip  from "../models/Trip.js"
 import Ticket from "../models/Ticket.js"
 import mongoose from "mongoose";
+import { tripSeedData } from "../lib/seed.js";
 
 
 const insertAll = async (req,res) =>{
-    await Trip.insertMany(tripDetails);
+    await Trip.insertMany(tripSeedData);
     res.send('Inserted all trip details');
 }
 
